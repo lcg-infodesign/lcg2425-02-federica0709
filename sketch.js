@@ -1,17 +1,60 @@
-function preload() {
-  // put preload code here
-}
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // put setup code here
-  const message =
-    "This is a template repository\nfor the course Laboratorio di Computergrafica\nCommunication Design, Politecnico di Milano";
-  textAlign(CENTER, CENTER);
-  textSize(16);
-  text(message, width / 2, height / 2);
+  noLoop();
+  //frameRate(5);
+  margin=30; //tutti i margini hanno dimensione 30
 }
 
 function draw() {
-  // put drawing code here
+
+  background("darkblue");
+  fill("white");
+   //let color = random(["yellow","pink", "grey"]);
+   //fill(color);
+  noStroke();
+  drawStars();
+}
+
+function drawStars() {
+
+  let gridSize = 50; // dimensione cella della griglia
+  let oGutter = 30; // gutter orizzontale
+  let vGutter = 30; // gutter verticale
+  
+  // ciclo for popolare la griglia di stelle
+  for (let xOff = margin + gridSize; xOff < windowWidth - margin; xOff += gridSize + oGutter) {
+    for (let yOff = margin + gridSize; yOff < windowHeight - margin; yOff += gridSize + vGutter) {
+     drawStar(xOff,yOff);
+    }
+  }
+}
+
+function drawStar(xOff,yOff) {
+  push(); // Save the current drawing style and transformation matrix
+  // numero dei vertici casuale scelto tra questi 5
+  let vertici = random([8, 10, 18, 24, 34]); 
+  let scaleFactor = random(0.2,1);
+  let rotazione=random(TWO_PI);
+
+  // trasformazione di scaling che modifica le dimensioni e l'incloinazione delle stelle
+  translate(xOff,yOff); // necessaria per far ruotare la stella intorno al proprio centro
+  rotate(rotazione);
+  scale(scaleFactor);
+
+  //disegna la forma
+   beginShape();
+    for (let i = 0; i < vertici; i++) {
+      let angolo = i * TWO_PI / vertici;
+      //a condizione i%2 == 0 è vera se i è pari (resto di i/2 uguale a 0(); 
+      //se la condizione è vera raggio diventa 30, altrimenti diventa 10.
+      let raggio = (i % 2 === 0) ? 30 : 10; // Use 30 for even vertices, 10 for odd
+      //x e y settano le coordinate del verice della stella, 
+      //cioè il suo centro 
+      let x = cos(angolo) * raggio;
+      let y = sin(angolo) * raggio;
+      vertex(x, y); // la posizione del centro della stella
+     }
+   endShape(CLOSE);
+
+  pop(); // Restore the previous drawing state
 }
